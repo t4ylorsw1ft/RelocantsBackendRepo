@@ -16,11 +16,19 @@ public class Instruction {
     @Column(nullable = false)
     private String titlePl;
 
+    @Column(nullable = false)
+    private String descriptionRu;
+
+    @Column(nullable = false)
+    private String descriptionPl;
+
     public Instruction() {}
 
-    public Instruction(String titleRu, String titlePl) {
+    public Instruction(String titleRu, String titlePl, String descriptionRu, String descriptionPl) {
         this.titleRu = titleRu;
         this.titlePl = titlePl;
+        this.descriptionRu = descriptionRu;
+        this.descriptionPl = descriptionPl;
     }
 
     public int getId() {
@@ -45,6 +53,19 @@ public class Instruction {
 
     public void setTitlePl(String titlePl) {
         this.titlePl = titlePl;
+    }
+
+    public String getDescriptionRu() {
+        return descriptionRu;
+    }
+    public void setDescriptionRu(String descriptionRu) {
+        this.descriptionRu = descriptionRu;
+    }
+    public String getDescriptionPl() {
+        return descriptionPl;
+    }
+    public void setDescriptionPl(String descriptionPl) {
+        this.descriptionPl = descriptionPl;
     }
 }
 

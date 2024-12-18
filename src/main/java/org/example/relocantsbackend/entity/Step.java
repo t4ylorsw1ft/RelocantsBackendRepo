@@ -24,15 +24,18 @@ public class Step {
 
     private int documentId;
 
+    private int stepNum;
+
     public Step() {}
 
-    public Step(int instructionId, String titleRu, String titlePl, String descriptionRu, String descriptionPl, int documentId) {
+    public Step(int instructionId, String titleRu, String titlePl, String descriptionRu, String descriptionPl, int documentId, int stepNum) {
         this.instructionId = instructionId;
         this.titleRu = titleRu;
         this.titlePl = titlePl;
         this.descriptionRu = descriptionRu;
         this.descriptionPl = descriptionPl;
         this.documentId = documentId;
+        this.stepNum = 0;
     }
 
     public int getId() {
@@ -89,5 +92,13 @@ public class Step {
 
     public void setDocumentId(int documentId) {
         this.documentId = documentId;
+    }
+
+    public int GetStepNum() {
+        return stepNum;
+    }
+
+    public void setStepNum(int stepNum) {
+        this.stepNum = stepNum;
     }
 }
