@@ -9,7 +9,6 @@ import org.example.relocantsbackend.exception.NotFoundException;
 import org.example.relocantsbackend.service.UserService;
 import org.example.relocantsbackend.util.auth.JwtProvider;
 import org.example.relocantsbackend.util.auth.PasswordHasher;
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class AuthController {
     private final UserService userService;
 
     @Autowired
-    public AuthController(UserService userService, EmailValidator emailValidator) {
+    public AuthController(UserService userService) {
         this.userService = userService;
     }
 
@@ -37,7 +36,7 @@ public class AuthController {
         LocalDateTime dateTime = LocalDateTime.now();
 
         User user = new User(userDto.getEmail(), passwordHash, userDto.getUsername(), null, dateTime);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(userService.saveUser(user));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.saveUser(user));
     }
 
     @PostMapping("/public/login")
@@ -65,7 +64,7 @@ public class AuthController {
             throw new LoginException();
         }
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(accessToken);
+        return ResponseEntity.status(HttpStatus.OK).body(accessToken);
     }
 
     @PostMapping("/public/refresh")
