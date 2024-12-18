@@ -31,10 +31,8 @@ public class UserController {
         // Получение текущей аутентификации из SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("bbbbbbbbbb");
         // Проверка, что аутентификация существует и является корректной
         if (authentication == null || !(authentication.getPrincipal() instanceof Integer)) {
-            System.out.println("aaaaaaaaaa");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
