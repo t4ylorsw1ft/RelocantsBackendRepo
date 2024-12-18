@@ -7,6 +7,7 @@ import org.example.relocantsbackend.dto.auth.RegisterUserDTO;
 import org.example.relocantsbackend.entity.User;
 import org.example.relocantsbackend.exception.NotFoundException;
 import org.example.relocantsbackend.service.UserService;
+import org.example.relocantsbackend.util.auth.JWTPair;
 import org.example.relocantsbackend.util.auth.JwtProvider;
 import org.example.relocantsbackend.util.auth.PasswordHasher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +30,28 @@ public class AuthController {
     }
 
     @PostMapping("/public/register")
-    public ResponseEntity<User> Register(@Valid @RequestBody RegisterUserDTO userDto) {
+    public ResponseEntity<JWTPair> Register(@Valid @RequestBody RegisterUserDTO userDto) {
         PasswordHasher hasher = new PasswordHasher();
+        JwtProvider jwtProvider = new JwtProvider();
 
         String passwordHash = hasher.generate(userDto.getPassword());
         LocalDateTime dateTime = LocalDateTime.now();
 
         User user = new User(userDto.getEmail(), passwordHash, userDto.getUsername(), null, dateTime);
-        return ResponseEntity.status(HttpStatus.OK).body(userService.saveUser(user));
+        userService.saveUser(user);
+
+        String accessToken = jwtProvider.generateAccessToken(user.getId());;
+        String refreshToken = refreshToken = jwtProvider.generateRefreshToken();
+        var jwtPair = new JWTPair(accessToken, refreshToken);
+
+        user.setRefreshToken(refreshToken);
+        userService.saveUser(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(jwtPair);
     }
 
     @PostMapping("/public/login")
-    public ResponseEntity<String> Login(@Valid @RequestBody LoginDTO loginDTO) throws LoginException {
+    public ResponseEntity<JWTPair> Login(@Valid @RequestBody LoginDTO loginDTO) throws LoginException {
         PasswordHasher hasher = new PasswordHasher();
         JwtProvider jwtProvider = new JwtProvider();
 
@@ -51,24 +62,21 @@ public class AuthController {
 
         String passwordHash = user.getPasswordHash();
 
-        String accessToken = null;
-        String refreshToken;
-
         if(hasher.verify(loginDTO.password, passwordHash)) {
-            accessToken = jwtProvider.generateAccessToken(user.getId());
-            refreshToken = jwtProvider.generateRefreshToken();
+            String accessToken = jwtProvider.generateAccessToken(user.getId());
+            String refreshToken = jwtProvider.generateRefreshToken();
+            JWTPair jwtPair = new JWTPair(accessToken, refreshToken);
             user.setRefreshToken(refreshToken);
             userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.OK).body(jwtPair);
         }
         else {
             throw new LoginException();
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(accessToken);
     }
 
     @PostMapping("/public/refresh")
-    public ResponseEntity<String> Refresh(@RequestBody String refreshToken) {
+    public ResponseEntity<JWTPair> Refresh(@RequestBody String refreshToken) {
         JwtProvider jwtProvider = new JwtProvider();
 
         User user = userService.getUserByRefreshToken(refreshToken);
@@ -76,20 +84,17 @@ public class AuthController {
             throw new NotFoundException("User", refreshToken);
         }
 
-        String newAccessToken = null;
-        String newRefreshToken;
-
         if(new Date().before(jwtProvider.verifyToken(user.getRefreshToken()).getExpiresAt())){
-            newAccessToken = jwtProvider.generateAccessToken(user.getId());
-            newRefreshToken = jwtProvider.generateRefreshToken();
+            String newAccessToken = jwtProvider.generateAccessToken(user.getId());
+            String newRefreshToken = jwtProvider.generateRefreshToken();
+            JWTPair jwtPair = new JWTPair(newAccessToken, newRefreshToken);
             user.setRefreshToken(newRefreshToken);
             userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.OK).body(jwtPair);
         }
         else {
             throw new ValidationException("Invalid refresh token");
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(newAccessToken);
     }
 
 

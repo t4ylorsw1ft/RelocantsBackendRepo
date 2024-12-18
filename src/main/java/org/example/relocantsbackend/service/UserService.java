@@ -29,6 +29,7 @@ public class UserService {
     }
 
     public User getUserByRefreshToken (String refreshToken) {
+        System.out.println("Searching for user with refreshToken: " + refreshToken);
         return userRepository.findByRefreshToken(refreshToken);
     }
 
