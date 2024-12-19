@@ -1,9 +1,7 @@
 package org.example.relocantsbackend.service;
 
 import org.example.relocantsbackend.entity.Event;
-import org.example.relocantsbackend.entity.User;
 import org.example.relocantsbackend.repository.EventRepository;
-import org.example.relocantsbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
