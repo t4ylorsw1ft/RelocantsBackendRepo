@@ -25,7 +25,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Inte
 
     @Query("SELECT COUNT(s) FROM Subscription s WHERE s.subscribedToId = :userId")
     int countFollowersByUserId(@Param("userId") int userId);
-    
+
     Subscription findBySubscriberIdAndSubscribedToId(int subscriberId, int subscribedToId);
 
 }

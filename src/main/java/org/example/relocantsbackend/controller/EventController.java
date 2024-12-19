@@ -76,7 +76,9 @@ public class EventController {
                 eventDTO.getDescription(),
                 eventDTO.getStartDateTime(),
                 eventDTO.getTotalSeats(),
-                eventDTO.getRegisteredSeats()
+                eventDTO.getRegisteredSeats(),
+                eventDTO.getEventTypeId(),
+                eventDTO.getPhotoUrl()
         );
 
         // Сохраняем событие через сервис

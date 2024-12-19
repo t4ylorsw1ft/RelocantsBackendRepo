@@ -29,17 +29,21 @@ public class Event {
     @Column(nullable = false)
     private Integer registeredSeats;
 
+    @Column(nullable = false)
+    private Integer eventTypeId;
+
     private String photoUrl;
 
     public Event() {}
 
-    public Event(int creatorId, String title, String description, LocalDateTime startDateTime, Integer totalSeats, Integer registeredSeats) {
+    public Event(int creatorId, String title, String description, LocalDateTime startDateTime, Integer totalSeats, Integer registeredSeats, Integer eventTypeId, String photoUrl) {
         this.creatorId = creatorId;
         this.title = title;
         this.description = description;
         this.startDateTime = startDateTime;
         this.totalSeats = totalSeats;
         this.registeredSeats = registeredSeats;
+        this.eventTypeId = eventTypeId;
     }
 
     public int getId() {
@@ -96,6 +100,14 @@ public class Event {
 
     public void setRegisteredSeats(Integer registeredSeats) {
         this.registeredSeats = registeredSeats;
+    }
+
+    public Integer getEventTypeId() {
+        return eventTypeId;
+    }
+
+    public void setEventTypeId(Integer eventTypeId) {
+        this.eventTypeId = eventTypeId;
     }
 }
 

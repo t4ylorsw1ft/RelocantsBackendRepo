@@ -20,6 +20,9 @@ public class EventDTO {
     @NotNull
     private Integer registeredSeats;
 
+    @NotNull
+    private Integer eventTypeId;
+
     private String photoUrl;
 
     public String getTitle() {
@@ -68,5 +71,13 @@ public class EventDTO {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Integer getEventTypeId() {
+        return eventTypeId;
+    }
+
+    public void setEventTypeId(Integer eventTypeId) {
+        this.eventTypeId = eventTypeId;
     }
 }
