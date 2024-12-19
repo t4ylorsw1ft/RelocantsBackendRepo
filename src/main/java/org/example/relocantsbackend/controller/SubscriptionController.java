@@ -1,6 +1,8 @@
 package org.example.relocantsbackend.controller;
 import org.example.relocantsbackend.dto.subscriptions.SubscriptionResponseDTO;
+import org.example.relocantsbackend.entity.Notification;
 import org.example.relocantsbackend.entity.Subscription;
+import org.example.relocantsbackend.service.NotificationService;
 import org.example.relocantsbackend.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +22,13 @@ import java.util.Map;
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public SubscriptionController(SubscriptionService subscriptionService) {
+    public SubscriptionController(SubscriptionService subscriptionService,
+                                  NotificationService notificationService) {
         this.subscriptionService = subscriptionService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/subscriptions/me")
@@ -129,6 +135,17 @@ public class SubscriptionController {
 
         try {
             subscriptionService.subscribe(userId, targetUserId);
+
+            Notification notification = new Notification(
+                    1,
+                    targetUserId,
+                    userId,
+                    LocalDateTime.now(),
+                    0
+            );
+
+            notificationService.saveNotification(notification);
+
             return ResponseEntity.ok("Successfully subscribed to user " + targetUserId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to subscribe");

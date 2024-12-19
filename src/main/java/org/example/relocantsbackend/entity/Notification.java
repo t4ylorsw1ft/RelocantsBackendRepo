@@ -22,13 +22,16 @@ public class Notification {
     @Column(nullable = false)
     private LocalDateTime notificationDate;
 
+    private int eventId;
+
     public Notification() {}
 
-    public Notification(int notificationTypeId, int userId, int relatedUserId, LocalDateTime notificationDate) {
+    public Notification(int notificationTypeId, int userId, int relatedUserId, LocalDateTime notificationDate, int eventId) {
         this.notificationTypeId = notificationTypeId;
         this.userId = userId;
         this.relatedUserId = relatedUserId;
         this.notificationDate = notificationDate;
+        this.eventId = eventId;
     }
 
     public int getId() {
@@ -69,5 +72,13 @@ public class Notification {
 
     public void setNotificationDate(LocalDateTime notificationDate) {
         this.notificationDate = notificationDate;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 }

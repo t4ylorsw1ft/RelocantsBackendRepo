@@ -5,6 +5,7 @@ import org.example.relocantsbackend.entity.User;
 import org.example.relocantsbackend.repository.EventRepository;
 import org.example.relocantsbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,8 @@ public class EventService {
     }
 
     public List<Event> getFutureEvents(LocalDateTime now) {
-        return eventRepository.findByStartDateTimeAfter(now);
+        Sort sort = Sort.by(Sort.Order.asc("startDateTime"));
+        return eventRepository.findByStartDateTimeAfter(now, sort);
     }
 
     public Event saveEvent(Event event) {

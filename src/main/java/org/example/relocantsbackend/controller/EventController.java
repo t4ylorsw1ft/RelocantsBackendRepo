@@ -151,9 +151,10 @@ public class EventController {
 System.out.println(inviteRequest.getEventId());
         Notification notification = new Notification(
                 5,
+                inviteRequest.getRelatedUserId(),
                 userId,
-                inviteRequest.getEventId(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                inviteRequest.getEventId()
         );
 
         try {
