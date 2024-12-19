@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/instructions")
 public class InstructionController {
@@ -18,9 +20,9 @@ public class InstructionController {
         this.instructionService = instructionService;
     }
 
-    @GetMapping("/getAll/{page}/{size}")
-    public Page<InstructionDTO> getAllInstructions(@PathVariable int page, @PathVariable int size) {
-        PageRequest pageable = PageRequest.of(page, size);
-        return instructionService.getAllInstructions(pageable);
+    @GetMapping("/getAll")
+    public List<InstructionDTO> getAllInstructions() {
+        return instructionService.getAllInstructions();
     }
+
 }

@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.Doc;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,15 +29,36 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @GetMapping("/getAll/{page}/{size}")
-    public Page<DocumentDTO> getAllDocuments(@PathVariable int page, @PathVariable int size) {
+    @GetMapping("/getAll")
+    public List<DocumentDTO> getAllDocuments() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Integer userId = (Integer) authentication.getPrincipal(); // Ожидается, что userId доступен в `Principal`.
 
-        Pageable pageable = PageRequest.of(page, size);
+        return documentService.getDocumentsByUserId(userId);
+    }
 
-        return documentService.getDocumentsByUserId(userId, pageable);
+    @GetMapping("/getById/{documentId}")
+    public ResponseEntity<Document> getDocumentById(@PathVariable Integer documentId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer userId = (Integer) authentication.getPrincipal(); // Ожидается, что userId доступен в `Principal`
+
+        // Получаем документ по ID
+        Optional<Document> documentOpt = documentService.getDocumentById(documentId);
+
+        if (documentOpt.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Документ не найден
+        }
+
+        Document document = documentOpt.get();
+
+        // Проверяем, принадлежит ли документ текущему пользователю
+        if (document.getUserId() != userId) {
+            return ResponseEntity.status(403).body(null); // Нет прав на доступ к документу
+        }
+
+        return ResponseEntity.ok(document);
     }
 
     @PostMapping("/create")

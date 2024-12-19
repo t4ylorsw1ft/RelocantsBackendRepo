@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InstructionService {
 
@@ -16,8 +18,8 @@ public class InstructionService {
     public InstructionService(InstructionRepository instructionRepository) {
         this.instructionRepository = instructionRepository;
     }
-
-    public Page<InstructionDTO> getAllInstructions(Pageable pageable) {
-        return instructionRepository.findAllBy(pageable);
+    public List<InstructionDTO> getAllInstructions() {
+        return instructionRepository.findAllInstructions();
     }
+
 }

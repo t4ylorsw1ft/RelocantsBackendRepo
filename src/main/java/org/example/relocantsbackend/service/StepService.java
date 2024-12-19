@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StepService {
 
@@ -16,7 +18,8 @@ public class StepService {
         this.stepRepository = stepRepository;
     }
 
-    public Page<StepDTO> getStepsByInstructionId(int instructionId, Pageable pageable) {
-        return stepRepository.findAllByInstructionId(instructionId, pageable);
+    public List<StepDTO> getStepsByInstructionId(int instructionId) {
+        return stepRepository.findAllByInstructionId(instructionId);
     }
+
 }

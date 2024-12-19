@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,9 +21,10 @@ public class DocumentService {
         this.documentRepository = documentRepository;
     }
 
-    public Page<DocumentDTO> getDocumentsByUserId(Integer userId, Pageable pageable) {
-        return documentRepository.findDocumentsByUserIdOrNull(userId, pageable);
+    public List<DocumentDTO> getDocumentsByUserId(Integer userId) {
+        return documentRepository.findDocumentsByUserIdOrNull(userId);
     }
+
 
     // Получение документа по ID
     public Optional<Document> getDocumentById(Integer documentId) {
