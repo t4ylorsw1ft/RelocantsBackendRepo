@@ -23,7 +23,7 @@ public class User {
 
     private String avatarUrl;
 
-    @Column(unique = true)
+    @Column(name = "refresh_token", nullable = true, unique = true)
     private String refreshToken;
 
     @Column(nullable = false)

@@ -3,6 +3,7 @@ package org.example.relocantsbackend.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.example.relocantsbackend.dto.auth.LoginDTO;
+import org.example.relocantsbackend.dto.auth.RefreshDTO;
 import org.example.relocantsbackend.dto.auth.RegisterUserDTO;
 import org.example.relocantsbackend.entity.User;
 import org.example.relocantsbackend.exception.NotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.security.auth.login.LoginException;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.logging.ConsoleHandler;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -76,10 +78,12 @@ public class AuthController {
     }
 
     @PostMapping("/public/refresh")
-    public ResponseEntity<JWTPair> Refresh(@RequestBody String refreshToken) {
+    public ResponseEntity<JWTPair> Refresh(@Valid @RequestBody RefreshDTO refreshDTO) {
         JwtProvider jwtProvider = new JwtProvider();
+        var refreshToken = refreshDTO.refreshToken;
 
         User user = userService.getUserByRefreshToken(refreshToken);
+
         if(user == null) {
             throw new NotFoundException("User", refreshToken);
         }
