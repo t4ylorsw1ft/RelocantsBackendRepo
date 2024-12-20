@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.print.Doc;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -54,7 +55,7 @@ public class DocumentController {
         Document document = documentOpt.get();
 
         // Проверяем, принадлежит ли документ текущему пользователю
-        if (document.getUserId() != userId) {
+        if (!Objects.equals(document.getUserId(), userId) && document.getUserId() != null) {
             return ResponseEntity.status(403).body(null); // Нет прав на доступ к документу
         }
 

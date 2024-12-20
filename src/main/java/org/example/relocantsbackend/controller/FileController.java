@@ -163,47 +163,24 @@ public class FileController {
         }
     }
 
-    @GetMapping(value = "/getDocumentPhotos/{documentId}", produces = MediaType.MULTIPART_MIXED_VALUE)
-    public ResponseEntity<MultiValueMap<String, Object>> getDocumentPhotosMultipart(@PathVariable int documentId) {
+    @GetMapping("/getDocumentPhotos/{documentId}")
+    public ResponseEntity<List<String>> getDocumentPhotos(@PathVariable int documentId) {
         try {
+            // Получение списка фотографий для указанного документа
             List<DocumentPhoto> documentPhotos = documentPhotoService.getPhotosByDocumentId(documentId);
 
-            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            // Извлечение только fileUrl
+            List<String> fileUrls = documentPhotos.stream()
+                    .map(DocumentPhoto::getFileUrl)
+                    .toList();
 
-            for (DocumentPhoto photo : documentPhotos) {
-                File file = new File(photo.getFileUrl());
-
-                if (file.exists()) {
-                    byte[] fileBytes = Files.readAllBytes(file.toPath());
-                    ByteArrayResource resource = new ByteArrayResource(fileBytes) {
-                        @Override
-                        public String getFilename() {
-                            return file.getName();
-                        }
-                    };
-
-                    // Определение типа содержимого
-                    String contentType = Files.probeContentType(file.toPath());
-                    if (contentType == null) contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
-
-                    // Добавление файла в ответ
-                    HttpHeaders partHeaders = new HttpHeaders();
-                    partHeaders.setContentDisposition(ContentDisposition.attachment().filename(file.getName()).build());
-                    partHeaders.setContentType(MediaType.parseMediaType(contentType));
-
-                    HttpEntity<ByteArrayResource> part = new HttpEntity<>(resource, partHeaders);
-
-                    body.add("file", part);
-                }
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.MULTIPART_MIXED)
-                    .body(body);
+            // Возврат списка URL в ответе
+            return ResponseEntity.ok(fileUrls);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 }

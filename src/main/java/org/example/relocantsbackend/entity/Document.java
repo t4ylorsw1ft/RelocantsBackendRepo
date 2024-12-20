@@ -10,7 +10,8 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int userId;
+    @Column(nullable = true)
+    private Integer userId;
 
     @Column(nullable = false)
     private String titleRu;
@@ -42,11 +43,11 @@ public class Document {
         this.id = id;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
