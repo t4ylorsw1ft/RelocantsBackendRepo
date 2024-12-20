@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public class RegisterUserDTO {
 
     @NotEmpty(message = "Name is required")
-    @Size(min = 8, message = "Name must be at least 8 characters long")
+    @Size(min = 1, message = "Name must be at least 8 characters long")
     private String username;
 
     @NotEmpty(message = "Password is required")
