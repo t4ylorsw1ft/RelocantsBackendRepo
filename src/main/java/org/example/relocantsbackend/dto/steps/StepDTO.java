@@ -4,11 +4,13 @@ public class StepDTO {
     private int id;
     private String titleRu;
     private String descriptionRu;
+    private Integer documentId; // Integer для учета null
 
-    public StepDTO(int id, String titleRu, String descriptionRu) {
+    public StepDTO(int id, String titleRu, String descriptionRu, Integer documentId) {
         this.id = id;
         this.titleRu = titleRu;
         this.descriptionRu = descriptionRu;
+        this.documentId = documentId;
     }
 
     public int getId() {
@@ -33,5 +35,13 @@ public class StepDTO {
 
     public void setDescriptionRu(String descriptionRu) {
         this.descriptionRu = descriptionRu;
+    }
+
+    public Integer getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(Integer documentId) {
+        this.documentId = documentId;
     }
 }

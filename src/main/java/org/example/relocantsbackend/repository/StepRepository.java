@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface StepRepository extends JpaRepository<Step, Integer> {
-    @Query("SELECT new org.example.relocantsbackend.dto.steps.StepDTO(s.id, s.titleRu, s.descriptionRu) " +
+    @Query("SELECT new org.example.relocantsbackend.dto.steps.StepDTO(s.id, s.titleRu, s.descriptionRu, s.documentId) " +
             "FROM Step s WHERE s.instructionId = :instructionId")
     List<StepDTO> findAllByInstructionId(int instructionId);
 
