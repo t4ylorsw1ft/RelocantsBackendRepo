@@ -26,8 +26,9 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable()) // Отключение CSRF для REST API
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(request -> request.getRequestURI().contains("/public/")).permitAll()// Разрешить доступ ко всем эндпоинтам с public
-                        .anyRequest().authenticated() // Остальные запросы требуют аутентификации
+                        .requestMatchers(request -> request.getRequestURI().contains("/public/")).permitAll()
+                        .requestMatchers(request -> request.getRequestURI().contains("/api/")).authenticated()// Разрешить доступ ко всем эндпоинтам с public
+                        .anyRequest().permitAll() // Остальные запросы требуют аутентификации
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Добавление JWT-фильтра
 
