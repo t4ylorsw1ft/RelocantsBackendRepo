@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FlatRepository extends JpaRepository<Flat, Long> {
 
-    @Query("SELECT f FROM Flat f WHERE f.city = :city AND f.price BETWEEN :minPrice AND :maxPrice")
+    @Query("SELECT f FROM Flat f WHERE LOWER(f.city) LIKE LOWER(CONCAT('%', :city, '%')) AND f.price BETWEEN :minPrice AND :maxPrice")
     List<Flat> findByCityAndPriceRange(@Param("city") String city,
                                        @Param("minPrice") int minPrice,
                                        @Param("maxPrice") int maxPrice);
@@ -18,7 +18,7 @@ public interface FlatRepository extends JpaRepository<Flat, Long> {
     List<Flat> findByPriceRange(@Param("minPrice") int minPrice,
                                 @Param("maxPrice") int maxPrice);
 
-    @Query("SELECT f FROM Flat f WHERE f.city = :city")
+    @Query("SELECT f FROM Flat f WHERE LOWER(f.city) LIKE LOWER(CONCAT('%', :city, '%'))")
     List<Flat> findByCity(@Param("city") String city);
 
     List<Flat> findAll();
