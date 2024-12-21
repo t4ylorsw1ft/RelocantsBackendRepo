@@ -1,16 +1,48 @@
 package org.example.relocantsbackend.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "flats") // Указываем имя таблицы
 public class Flat {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Автоинкрементный первичный ключ
+    private Long id;
+
+    @Column(nullable = false, length = 100) // Поле не может быть NULL, длина ограничена 100 символами
     private String title;
+
+    @Column(nullable = false) // Поле не может быть NULL
     private int price;
+
+    @Column(nullable = false, length = 50)
     private String city;
+
+    @Column(nullable = false, length = 150)
     private String adress;
+
+    @Column(nullable = false)
     private double area;
+
+    @Column(nullable = false)
     private int num_of_rooms;
+
+    @Column(nullable = false, length = 500) // Ссылка на квартиру, длина до 500 символов
     private String link;
+
+    @Column(length = 500) // Ссылка на изображение, длина до 500 символов
     private String image_url;
 
-    // getters and setters
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -75,4 +107,3 @@ public class Flat {
         this.image_url = image_url;
     }
 }
-
